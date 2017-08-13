@@ -14,21 +14,23 @@
 # limitations under the License.
 #
 
-# This contains the module build definitions for the hardware-specific
-# components for this device.
-#
-# As much as possible, those components should be built unconditionally,
-# with device-specific names to avoid collisions, to avoid device-specific
-# bitrot and build breakages. Building a component unconditionally does
-# *not* include it on all devices, so it is safe even with hardware-specific
-# components.
+# Release name
+PRODUCT_RELEASE_NAME := ailsa_ii
 
-LOCAL_PATH := $(call my-dir)
+$(call inherit-product, build/target/product/embedded.mk)
 
-ifeq ($(TARGET_DEVICE),axon7)
+# Inherit from our custom product configuration
+$(call inherit-product, vendor/omni/config/common.mk)
 
-include $(call all-makefiles-under,$(LOCAL_PATH))
+# Time Zone data for recovery
+PRODUCT_COPY_FILES += \
+    bionic/libc/zoneinfo/tzdata:recovery/root/system/usr/share/zoneinfo/tzdata
 
-include $(CLEAR_VARS)
+## Device identifier. This must come after all inclusions
+PRODUCT_DEVICE := axon7
+PRODUCT_NAME := omni_axon7
+PRODUCT_BRAND := ZTE
+PRODUCT_MODEL := Axon 7
+PRODUCT_MANUFACTURER := ZTE
 
-endif
+
