@@ -178,6 +178,7 @@ PRODUCT_PACKAGES += \
     copybit.msm8996 \
     gralloc.msm8996 \
     hwcomposer.msm8996 \
+    libqdMetaData.system \
     libtinyxml \
     memtrack.msm8996 \
     libdisplayconfig \
