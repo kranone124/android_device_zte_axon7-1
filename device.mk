@@ -25,7 +25,7 @@ $(call inherit-product-if-exists, vendor/zte/axon7/axon7-vendor.mk)
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
+#DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
 
 PRODUCT_ENFORCE_RRO_TARGETS := \
     framework-res
@@ -184,12 +184,12 @@ PRODUCT_PACKAGES += \
     qdcm_calib_data_zteSAM_S6E3HA3_SAM_25601440_5P5Inch.xml
 
 # Doze mode
-PRODUCT_PACKAGES += \
-    ZteDoze
+#PRODUCT_PACKAGES += \
+#    ZteDoze
 
 # Flip Cover App
-PRODUCT_PACKAGES += \
-    FlipFlap
+#PRODUCT_PACKAGES += \
+#    FlipFlap
 
 # DRM
 PRODUCT_PACKAGES += \
