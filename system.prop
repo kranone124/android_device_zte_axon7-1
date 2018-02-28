@@ -157,3 +157,10 @@ dalvik.vm.image-dex2oat-threads=4
 persist.bt.enableAptXHD=true
 persist.service.btui.use_aptx=1
 persistent.bt.a2dp_offload_cap=sbc-aptx-aptXHD
+
+# Display power reduction (FOSS)
+ro.qcom.dpps.sensortype=3
+ro.qualcomm.display.paneltype=1
+ro.qualcomm.foss=1
+config.foss.xml=1
+config.foss.path=/vendor/etc/FOSSConfig.xml
