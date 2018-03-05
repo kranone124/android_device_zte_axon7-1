@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2012, 2014-2017, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2012, 2014-2016, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -25,9 +25,9 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-import /vendor/etc/init/hw/init.qcom.power.rc
-import /vendor/etc/init/hw/init.qcom.usb.rc
-import /vendor/etc/init/hw/init.msm.usb.configfs.rc
+import init.qcom.power.rc
+import init.qcom.usb.rc
+import init.msm.usb.configfs.rc
 
 on early-init
     mkdir /firmware 0771 system system
@@ -40,8 +40,6 @@ on early-init
     chmod 0620 /dev/kmsg
 
 on init
-    export LD_SHIM_LIBS /system/vendor/lib/hw/camera.msm8996.so|/system/vendor/lib/libshim_camera.so:/system/vendor/lib/libmmcamera_ppeiscore.so|/system/vendor/lib/libshim_camera.so:/system/vendor/lib/libFNVfbEngineHAL.so|/system/vendor/lib/libshim_camera.so
-
     # Set permissions for persist partition
     mkdir /persist 0771 root system
 
@@ -64,7 +62,7 @@ on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
-    mount_all /vendor/etc/fstab.qcom
+    mount_all fstab.qcom
 
     mkdir /persist/data 0700 system system
     restorecon_recursive /persist
@@ -80,10 +78,11 @@ on post-fs
 
 # msm specific files that need to be created on /data
 on post-fs-data
-    mkdir /data/vendor/misc 01771 system system
-
     # Create directory for tftp
     mkdir /data/vendor/tombstones 0771 system system
+
+    # Create directory for TZ Apps
+    mkdir /data/misc/qsee 0770 system system
 
     #Create directories for Fingerprint
     mkdir /data/system/fingerprint 0700 system system
@@ -94,6 +93,8 @@ on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
 
+    mkdir /data/misc/ipa 0700 net_admin net_admin
+
     mkdir /data/vendor/ramdump 0771 root system
     mkdir /data/vendor/bluetooth 0770 bluetooth bluetooth
     mkdir /data/vendor/ramdump/bluetooth 0770 bluetooth bluetooth
@@ -102,20 +103,26 @@ on post-fs-data
     mkdir /data/vendor/netmgr 0770 radio radio
     chmod 0770 /data/vendor/netmgr
 
-    # Create ipacm log dir
-    mkdir /data/vendor/ipa 0770 radio radio
-    chmod 0770 /data/vendor/ipa
-
     # Create the directories used by CnE subsystem
     mkdir /data/connectivity 0771 system system
     chown system system /data/connectivity
 
+    # Create the directories used by DPM subsystem
+    mkdir /data/dpm 0771 system system
+    chown system system /data/dpm
+
+    mkdir /data/dpm/nsrm 0771 system system
+    chown system system /data/dpm/nsrm
+
     # Create directory used by audio subsystem
-    mkdir /data/vendor/misc/audio 0770 audio audio
+    mkdir /data/misc/audio 0770 audio audio
 
     # Create directory for audio delta files
-    mkdir /data/vendor/misc/audio/acdbdata 0770 media audio
-    mkdir /data/vendor/misc/audio/acdbdata/delta 0770 media audio
+    mkdir /data/misc/audio/acdbdata 0770 media audio
+    mkdir /data/misc/audio/acdbdata/delta 0770 media audio
+
+    # Create directory used by the DASH client
+    mkdir /data/misc/dash 0770 media audio
 
     # Create directory for radio
     mkdir /data/vendor/radio 0770 system radio
@@ -133,6 +140,14 @@ on post-fs-data
     mkdir /data/misc/location/quipc 0770 gps system
     mkdir /data/misc/location/gsiff 0770 gps gps
 
+    #Create directory from IMS services
+    mkdir /data/shared 0755
+    chown system system /data/shared
+
+    #Create directory for FOTA
+    mkdir /data/fota 0771
+    chown system system /data/fota
+
     # Create /data/time folder for time-services
     mkdir /data/time/ 0700 system system
 
@@ -147,35 +162,26 @@ on post-fs-data
     #Create a folder for SRS to be able to create a usercfg file
     mkdir /data/data/media 0770 media media
 	
-    # SSC/SLPI sensors
-    mkdir /persist/sensors
-    chown root system /persist/sensors
-    chmod 0775 /persist/sensors
-    chown root system /persist/sensors/sensors_settings
-    chmod 0664 /persist/sensors/sensors_settings
-    chown root system /persist/sensors/sns.reg
-    chmod 0664 /persist/sensors/sns.reg
-    chown root system /persist/PRSensorData.txt
-    chmod 0660 /persist/PRSensorData.txt
-    chown root system /persist/PSensor3cm_ct.txt
-    chmod 0660 /persist/PSensor3cm_ct.txt
+    # Sensor
+    mkdir /data/misc/sensors
+    mkdir /persist/sensors 0770 system system
+    chmod 0775 /data/misc/sensors
+    chmod 0755 /persist/sensors
+    chmod 0644 /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
 
-    # /dev/sensors only supports an ioctl to get the current SLPI timestamp;
-    # allow the sensors daemon to perform this as non-root
-    chown root system /dev/sensors
-    chmod 0660 /dev/sensors
-
-    # Create PERFD deamon related dirs
-    mkdir /data/vendor/perfd 0770 root system
-    chmod 2770 /data/vendor/perfd
-    rm /data/vendor/perfd/default_values
+    #Create PERFD deamon related dirs
+    mkdir /data/system/perfd 0770 root system
+    chmod 2770 /data/system/perfd
+    rm /data/system/perfd/default_values
+    start perfd
 
     # NFC local data and nfcee xml storage
     mkdir /data/nfc 0770 nfc nfc
     mkdir /data/nfc/param 0770 nfc nfc
 
-    # Create IOP  deamon related dirs
-    mkdir /data/vendor/iop 0770 root system
+    #Create IOP  deamon related dirs
+    mkdir /data/misc/iop 0770 root system
 
     # Mark the copy complete flag to not completed
     write /data/vendor/radio/copy_complete 0
@@ -183,7 +189,10 @@ on post-fs-data
     chmod 0660 /data/vendor/radio/copy_complete
 
     # copy prebuilt qcril.db files always
-    copy /system/vendor/qcril.db /data/misc/radio/qcril_prebuilt.db
+    copy /system/vendor/radio/qcril_database/qcril.db /data/vendor/radio/qcril_prebuilt.db
+    chown radio radio /data/vendor/radio/qcril_prebuilt.db
+    chmod 0660 /data/vendor/radio/qcril_prebuilt.db
+    copy /system/vendor/radio/qcril_database/qcril.db /data/misc/radio/qcril_prebuilt.db
     chown radio radio /data/misc/radio/qcril_prebuilt.db
     chmod 0660 /data/misc/radio/qcril_prebuilt.db
 
@@ -194,7 +203,10 @@ on post-fs-data
     write /data/vendor/radio/db_check_done 0
     chown radio radio /data/vendor/radio/db_check_done
     chmod 0660 /data/vendor/radio/db_check_done
-
+	
+    # Reset music VKontakte
+    copy /system/vendor/radio/qcril_database/qcril.db /data/data/com.vkontakte.android/shared_prefs/PlayerService.xml
+	
 on late-fs
     # boot time fs tune
     write /sys/block/sda/queue/iostats 0
@@ -322,8 +334,28 @@ on boot
     chown root system /sys/module/zte_hall/parameters/hall_timer_debug
     chown root system /sys/module/zte_hall/parameters/hall_interrupt_count
 
+    # Create SWAP related dirs
+    mkdir /data/system/swap 0770 root system
+    chmod 2770 /data/system/swap
+
     #WAPI
     mkdir /data/misc/wapi_certificate 0770 system wifi
+
+service perfd /system/vendor/bin/perfd
+    class main
+    user root
+    group root readproc
+    disabled
+    socket perfd seqpacket 0666 root system
+    writepid /dev/cpuset/system-background/tasks
+
+service iop /system/vendor/bin/iop
+    class main
+    user root
+    group root
+    disabled
+    socket iop seqpacket 0666 root system
+    writepid /dev/cpuset/system-background/tasks
 
 on property:sys.boot_completed=1
     # end boot time fs tune
@@ -403,6 +435,32 @@ service hci_filter_root /system/vendor/bin/wcnss_filter
     group bluetooth oem_2950 system wakelock
     disabled
 
+service config_bt_addr /system/vendor/bin/bt_mac_writer -O
+    class core
+    user bluetooth
+    group bluetooth radio
+    oneshot
+
+service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
+    class core
+    user root
+    seclabel u:r:bluetooth_loader:s0
+    oneshot
+
+service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
+    class late_start
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    seclabel u:r:bluetooth_loader:s0
+    oneshot
+
+on property:bluetooth.hciattach=true
+    start hciattach
+
+on property:bluetooth.hciattach=false
+    setprop bluetooth.status off
+
 service netmgrd /system/vendor/bin/netmgrd
     class main
     user root
@@ -415,10 +473,10 @@ service ipacm-diag /system/bin/ipacm-diag
     socket ipacm_log_file dgram 660 system net_admin
     group net_admin oem_2950
 
-service ipacm /system/vendor/bin/ipacm
+service ipacm /system/bin/ipacm
     class main
-    user radio
-    group radio inet
+    user net_admin
+    group net_admin inet
     writepid /dev/cpuset/system-background/tasks
 
 service qti /system/vendor/bin/qti
@@ -429,11 +487,8 @@ service qti /system/vendor/bin/qti
 
 service sensors /system/vendor/bin/sensors.qcom
     class core
-    user system
-    group system
-    # Grants the ability for this daemon to bind IPC router ports so it can
-    # register QMI services
-    capabilities NET_BIND_SERVICE
+    user root
+    group root
     writepid /dev/cpuset/system-background/tasks
 
 on property:ro.use_data_netmgrd=false
@@ -481,10 +536,10 @@ on property:sys.shutdown.requested=*
 service loc_launcher /system/vendor/bin/loc_launcher
     #loc_launcher will start as root and set its uid to gps
     class late_start
-    group gps inet diag wifi
+    group gps inet oem_2950 wifi
     writepid /dev/cpuset/system-background/tasks
 
-service qcom-sh /vendor/bin/init.qcom.sh
+service qcom-sh /system/bin/sh /init.qcom.sh
     class late_start
     user root
     oneshot
@@ -520,6 +575,12 @@ service msm_irqbalance /system/vendor/bin/msm_irqbalance -f /system/vendor/etc/m
     user root
     group root
     disabled
+    writepid /dev/cpuset/system-background/tasks
+
+service qseeproxydaemon /system/vendor/vendor/bin/qseeproxydaemon
+    class late_start
+    user system
+    group system
     writepid /dev/cpuset/system-background/tasks
 
 on charger
@@ -559,18 +620,44 @@ service qseecomd /system/vendor/bin/qseecomd
     group root
     writepid /dev/cpuset/system-background/tasks
 
-service thermal-engine /system/vendor/bin/thermal-engine
+service thermal-engine /system/vendor/bin/thermal-engine -c /system/etc/thermal-engine-8996-normal.conf
    class main
    user root
    socket thermal-send-client stream 0666 system system
    socket thermal-recv-client stream 0660 system system
    socket thermal-recv-passive-client stream 0666 system system
-   socket thermal-send-rule stream 0660 system system
    group root
    socket thermal-send-client stream 0666 system system
    socket thermal-recv-client stream 0660 system system
    socket thermal-recv-passive-client stream 0666 system system
    writepid /dev/cpuset/system-background/tasks
+
+service thermal-perf /system/vendor/bin/thermal-engine -c /system/etc/thermal-engine-8996-perf.conf
+   class main
+   user root
+   socket thermal-send-client stream 0666 system system
+   socket thermal-recv-client stream 0660 system system
+   socket thermal-recv-passive-client stream 0666 system system
+   group root
+   socket thermal-send-client stream 0666 system system
+   socket thermal-recv-client stream 0660 system system
+   socket thermal-recv-passive-client stream 0666 system system
+   disabled
+   writepid /dev/cpuset/system-background/tasks
+
+#smart cpu enable
+on property:debug.zte.vr_mode=1
+    write /d/spmi/spmi-0/address 0x00000843
+    write /d/spmi/spmi-0/data  0x0
+    stop thermal-engine
+    start thermal-perf
+
+#smart cpu disable
+on property:debug.zte.vr_mode=0
+    write /d/spmi/spmi-0/address 0x00000843
+    write /d/spmi/spmi-0/data  0x80
+    stop thermal-perf
+    start thermal-engine
 
 service adsprpcd /system/vendor/bin/adsprpcd
     class main
@@ -625,7 +712,7 @@ service vendor.imsrcsservice /system/vendor/bin/imsrcsd
     disabled
     writepid /dev/cpuset/system-background/tasks
 
-on property:vendor.ims.DATA_DAEMON_STATUS=1
+oon property:vendor.ims.DATA_DAEMON_STATUS=1
     start ims_rtp_daemon
     start vendor.imsrcsservice
 

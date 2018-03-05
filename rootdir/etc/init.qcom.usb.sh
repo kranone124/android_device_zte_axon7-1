@@ -1,4 +1,4 @@
-#!/vendor/bin/sh
+#!/system/bin/sh
 # Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -107,7 +107,6 @@ baseband=`getprop ro.baseband`
 
 echo 1  > /sys/class/android_usb/f_mass_storage/lun/nofua
 usb_config=`getprop persist.sys.usb.config`
-debuggable=`getprop ro.debuggable`
 case "$usb_config" in
     "" | "adb") #USB persist config not set, select default configuration
       case "$esoc_link" in

@@ -53,6 +53,8 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := kryo
 
+ENABLE_CPUSETS := true
+
 TARGET_USES_64_BIT_BINDER := true
 
 # HIDL
@@ -69,7 +71,7 @@ BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/zte/msm8996
-TARGET_KERNEL_CONFIG := pnw_axon7_defconfig
+TARGET_KERNEL_CONFIG := aex_axon7_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 
 # Qualcomm support
@@ -121,8 +123,14 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
-# CM Hardware
-BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
+# Enable real time lockscreen charging current values
+BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
+
+# Lineage hardware
+BOARD_HARDWARE_CLASS += \
+    device/zte/axon7/lineagehw \
+    hardware/lineage/lineagehw
+
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchscreen/wake_gesture"
 
 # CNE and DPM
@@ -148,13 +156,15 @@ TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
 SF_VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
 
-# Dex
+# Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
-    WITH_DEXPREOPT ?= true
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+    endif
   endif
 endif
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
 
 # GPS
 TARGET_NO_RPC := true
@@ -188,8 +198,6 @@ BOARD_FLASH_BLOCK_SIZE := 262144
 
 # Power
 TARGET_POWERHAL_VARIANT := qcom
-TARGET_HAS_NO_WIFI_STATS := true
-TARGET_USES_INTERACTION_BOOST := true
 
 # RIL
 TARGET_RIL_VARIANT := caf
@@ -207,6 +215,16 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(PLATFORM_PATH)
 #include device/qcom/sepolicy/sepolicy.mk
 
 #BOARD_SEPOLICY_DIRS += $(PLATFORM_PATH)/sepolicy
+
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/vendor/lib64/liblowi_wifihal_nl.so|libshims_is_wifi_driver_loaded.so \
+    /system/vendor/lib/hw/camera.msm8996.so|/system/vendor/lib/libshim_camera.so \
+    /system/vendor/lib/libmmcamera_ppeiscore.so|/system/vendor/lib/libshim_camera.so \
+    /system/vendor/lib/libFNVfbEngineHAL.so|/system/vendor/lib/libshim_camera.so
+
+# Timeservice
+BOARD_USES_QC_TIME_SERVICES := true
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
