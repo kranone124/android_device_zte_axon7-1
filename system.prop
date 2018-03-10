@@ -98,6 +98,9 @@ persist.radio.VT_HYBRID_ENABLE=1
 ro.nfc.port=I2C
 persist.nfc.smartcard.config=SIM1,eSE1
 
+# AoD
+persist.debug.force_burn_in=true
+
 # Perf
 ro.am.reschedule_service=true
 ro.min_freq_0=307200
