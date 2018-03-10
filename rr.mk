@@ -17,23 +17,22 @@
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
+
+# Inherit from our custom product configuration
+$(call inherit-product, vendor/du/config/common_full_phone.mk)
 
 # Inherit from ailsa_ii device
 $(call inherit-product, device/zte/axon7/device.mk)
 
-# Inherit some common ResurrectionRemix stuff.
-$(call inherit-product, vendor/rr/config/common_full_phone.mk)
-
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := rr_axon7
+PRODUCT_NAME := du_axon7
 PRODUCT_DEVICE := axon7
 PRODUCT_BRAND := ZTE
 PRODUCT_MODEL := ZTE Axon 7
 PRODUCT_MANUFACTURER := ZTE
-
-# RR
-ro.rr.maintainer=Nikolay Vyalykh (NFound)
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_NAME="P996A03_O" \
