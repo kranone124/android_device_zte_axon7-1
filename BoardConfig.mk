@@ -53,8 +53,6 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := kryo
 
-ENABLE_CPUSETS := true
-
 TARGET_USES_64_BIT_BINDER := true
 
 # HIDL
@@ -99,7 +97,7 @@ AUDIO_FEATURE_ENABLED_NT_PAUSE_TIMEOUT := true
 AUDIO_FEATURE_ENABLED_PCM_OFFLOAD_24 := true
 AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
 AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
-AUDIO_FEATURE_ENABLED_SPKR_PROTECTION := true
+#AUDIO_FEATURE_ENABLED_SPKR_PROTECTION := true
 #AUDIO_FEATURE_ENABLED_VORBIS_OFFLOAD := true
 #AUDIO_FEATURE_ENABLED_WMA_OFFLOAD := true
 AUDIO_USE_LL_AS_PRIMARY_OUTPUT := false
@@ -128,8 +126,7 @@ BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
 
 # Lineage hardware
 BOARD_HARDWARE_CLASS += \
-    device/zte/axon7/lineagehw \
-    hardware/lineage/lineagehw
+    device/zte/axon7/lineagehw
 
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchscreen/wake_gesture"
 
@@ -156,15 +153,13 @@ TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
 SF_VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
 
-# Enable dexpreopt to speed boot time
+# Dex
 ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
-    endif
+    WITH_DEXPREOPT ?= true
   endif
 endif
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
 
 # GPS
 TARGET_NO_RPC := true
@@ -198,6 +193,7 @@ BOARD_FLASH_BLOCK_SIZE := 262144
 
 # Power
 TARGET_POWERHAL_VARIANT := qcom
+TARGET_USES_INTERACTION_BOOST := true
 
 # RIL
 TARGET_RIL_VARIANT := caf
@@ -206,6 +202,10 @@ TARGET_RIL_VARIANT := caf
 TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.full
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
+
+# Extended Filesystem Support
+TARGET_EXFAT_DRIVER := exfat
+TARGET_KERNEL_HAVE_EXFAT := true
 
 # Releasetools
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_axon7
@@ -218,7 +218,6 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(PLATFORM_PATH)
 
 # Shims
 TARGET_LD_SHIM_LIBS := \
-    /system/vendor/lib64/liblowi_wifihal_nl.so|libshims_is_wifi_driver_loaded.so \
     /system/vendor/lib/hw/camera.msm8996.so|/system/vendor/lib/libshim_camera.so \
     /system/vendor/lib/libmmcamera_ppeiscore.so|/system/vendor/lib/libshim_camera.so \
     /system/vendor/lib/libFNVfbEngineHAL.so|/system/vendor/lib/libshim_camera.so
