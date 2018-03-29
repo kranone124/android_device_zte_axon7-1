@@ -192,6 +192,8 @@ PRODUCT_PACKAGES += \
     libtinyxml \
     memtrack.msm8996 \
     libdisplayconfig \
+    vendor.display.config@1.0 \
+    vendor.display.config@1.0_vendor \
     qdcm_calib_data_zteSAM_S6E3HA3_SAM_25601440_5P5Inch.xml
 
 # Doze package
@@ -384,6 +386,10 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl
+
+# TextClassifier
+PRODUCT_PACKAGES += \
+    textclassifier.smartselection.bundle1
 
 # USB
 PRODUCT_PACKAGES += \

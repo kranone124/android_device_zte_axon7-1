@@ -17,6 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="reboot_to_recovery_message" translatable="false">Перезагрузка в режим восстановления</string>
+    <string name="reboot_to_recovery_message" translatable="false">Перезагрузка в TWRP</string>
     <string name="reboot_to_bootloader_message" translatable="false">Перезагрузка в загрузчик</string>
 </resources>
