@@ -22,13 +22,13 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
 # Inherit some common Bootleggers stuff.
-$(call inherit-product, vendor/bootleggers/config/common_full_phone.mk)
+$(call inherit-product, vendor/aosip/config/common_full_phone.mk)
 
 # Inherit from ailsa_ii device
 $(call inherit-product, device/zte/axon7/device.mk)
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := bootleg_axon7
+PRODUCT_NAME := aosip_axon7
 PRODUCT_DEVICE := axon7
 PRODUCT_BRAND := ZTE
 PRODUCT_MODEL := ZTE Axon 7
