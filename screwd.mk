@@ -21,14 +21,14 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 # Inherit from the common Open Source product configuration
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
-# Inherit some common Bootleggers stuff.
-$(call inherit-product, vendor/screwd/main.mk)
+# Inherit some common LineageOS stuff.
+$(call inherit-product, vendor/dot/config/common.mk)
 
 # Inherit from ailsa_ii device
 $(call inherit-product, device/zte/axon7/device.mk)
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := screwd_axon7
+PRODUCT_NAME := dot_axon7
 PRODUCT_DEVICE := axon7
 PRODUCT_BRAND := ZTE
 PRODUCT_MODEL := ZTE Axon 7
