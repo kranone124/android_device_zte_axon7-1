@@ -167,6 +167,9 @@ endif
 TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 
+# Extended Filesystem Support
+TARGET_EXFAT_DRIVER := sdfat
+
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(PLATFORM_PATH)/config.fs
 
@@ -197,7 +200,7 @@ BOARD_FLASH_BLOCK_SIZE := 262144
 TARGET_POWERHAL_VARIANT := qcom
 
 # RIL
-#TARGET_RIL_VARIANT := caf
+TARGET_RIL_VARIANT := caf
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.full
