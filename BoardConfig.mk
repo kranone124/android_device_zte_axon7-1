@@ -71,7 +71,7 @@ BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/zte/msm8996
-TARGET_KERNEL_CONFIG := lineageos_axon7_defconfig
+TARGET_KERNEL_CONFIG := hellsgate_axon7_defconfig
 KERNEL_TOOLCHAIN_PREFIX :=$(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/aarch64/sdclang-5.5/bin/aarch64-cortex_a57-linux-gnueabi-
 
 # Qualcomm support
