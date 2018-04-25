@@ -68,9 +68,9 @@ BOARD_RAMDISK_OFFSET     := 0x01000000
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
+TARGET_KERNEL_CLANG_PATH := $(ANDROID_BUILD_TOP)/prebuilts/clang/host/$(HOST_OS)-x86/7.0-DragonTC/bin
 TARGET_KERNEL_SOURCE := kernel/zte/msm8996
 TARGET_KERNEL_CONFIG := hellsgate_axon7_defconfig
-KERNEL_TOOLCHAIN_PREFIX :=$(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/aarch64/sdclang-5.5/bin/aarch64-cortex_a57-linux-gnueabi-
 
 # Qualcomm support
 BOARD_USES_QCOM_HARDWARE := true
