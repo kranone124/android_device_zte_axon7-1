@@ -68,13 +68,13 @@
         <version>1.0</version>
         <interface>
             <name>ICryptoFactory</name>
-            <instance>widevine</instance>
             <instance>default</instance>
+            <instance>widevine</instance>
         </interface>
         <interface>
             <name>IDrmFactory</name>
-            <instance>widevine</instance>
             <instance>default</instance>
+            <instance>widevine</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -88,11 +88,12 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.gnss</name>
-        <transport arch="32+64">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
             <name>IGnss</name>
             <instance>default</instance>
+            <instance>gnss_vendor</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -142,7 +143,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.light</name>
-        <transport arch="32+64">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
             <name>ILight</name>
@@ -183,7 +184,7 @@
     <hal format="hidl">
         <name>android.hardware.power</name>
         <transport>hwbinder</transport>
-        <version>1.1</version>
+        <version>1.0</version>
         <interface>
             <name>IPower</name>
             <instance>default</instance>
@@ -215,15 +216,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.sensors</name>
-        <transport arch="32+64">passthrough</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ISensors</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.renderscript</name>
         <transport arch="32+64">passthrough</transport>
         <version>1.0</version>
@@ -233,11 +225,38 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>android.hardware.sensors</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ISensors</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.soundtrigger</name>
         <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
             <name>ISoundTriggerHw</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.tetheroffload.config</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IOffloadConfig</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.tetheroffload.control</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IOffloadControl</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -316,15 +335,6 @@
     <hal format="hidl">
         <name>com.quicinc.cne.server</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IServer</name>
-            <instance>cnd</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>com.quicinc.cne.server</name>
-        <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
             <name>IServer</name>
@@ -359,6 +369,51 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>vendor.lineage.livedisplay</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IColor</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.lineage.power</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ILineagePower</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.gnss</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ILocHidlGnss</name>
+            <instance>gnss_vendor</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.iop</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IIop</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.perf</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IPerf</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>vendor.qti.hardware.qdutils_disp</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -378,25 +433,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>vendor.qti.hardware.radio.atcmdfwd</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IAtCmdFwd</name>
-            <instance>AtCmdFwdService</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.config</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IConfig</name>
-            <instance>radioconfig0</instance>
-            <instance>radioconfig1</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>vendor.qti.hardware.radio.ims</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -413,7 +449,6 @@
         <interface>
             <name>IUimLpa</name>
             <instance>UimLpa0</instance>
-            <instance>UimLpa1</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -474,14 +509,5 @@
             <name>IRTPService</name>
             <instance>imsrtpservice</instance>
         </interface>
-    </hal>
-    <hal format="hidl">
-        <name>vendor.lineage.power</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ILineagePower</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
+        </hal>
 </manifest>
